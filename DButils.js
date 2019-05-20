@@ -9,9 +9,9 @@ var poolConfig = {
 
 // TODO: edit this
 var connectionConfig = {
-    userName: '',
-    password: '',
-    server: '',
+    userName: 'vacation-api',
+    password: 'Assignment3',
+    server: 'vacation-apidb.database.windows.net',
     options: {encrypt: true, database: ''}
 };
 

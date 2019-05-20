@@ -1,5 +1,5 @@
 'use strict';
-let DButilsAzure = require('./DButils');
+let DButilsAzure = require('../../DButils');
 
 
 exports.login = function (req, res) {
