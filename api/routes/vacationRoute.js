@@ -1,18 +1,8 @@
 'use strict';
 module.exports = function(app) {
-  var vacation = require('../controllers/vacationController');
+  var todoList = require('../controllers/vacationController');
 
-  // todoList Routes
   app.route('/tasks')
-    .get(vacation.list_all_tasks)
-    .post(vacation.create_a_task);
+    .get(todoList.list_all_tasks);
 
-  app.route('/test')
-    .get(vacation.list_all_tasks);
-
-
-  app.route('/tasks/:taskId')
-    .get(vacation.read_a_task)
-    .put(vacation.update_a_task)
-    .delete(vacation.delete_a_task);
 };
