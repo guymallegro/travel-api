@@ -19,7 +19,13 @@ exports.login = function (req, res) {
     res.send("Given user name is: " + req.body.userName);
 };
 
-exports.list_all_tasks = function (req, res) {
+exports.verifyAnswer = function (req, res) {
+    DButilsAzure.execQuery("SELECT * FROM UsersQuestions where userName ='"+req.body.userName+"' AND firstQuestion='"+req.body.firstQuesstion +"' AND firstAnswer='" +req.body.firstAnswer +"'")
+        .then(function (result) {
+            res.send(result);
+            console.log(result);
+        })
+
     res.send("TEST");
 };
 

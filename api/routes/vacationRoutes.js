@@ -9,7 +9,7 @@ module.exports = function (app) {
       .post(vacation.register);
 
   app.route('/verifyAnswer')
-      .post(vacation.list_all_tasks);
+      .post(vacation.verifyAnswer);
 
   app.route('/getMostPopular')
       .post(vacation.list_all_tasks);
