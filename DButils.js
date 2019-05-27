@@ -73,5 +73,4 @@ exports.execQuery = function (query) {
             reject(err)
         }
     });
-
 };
