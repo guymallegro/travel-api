@@ -6,7 +6,7 @@ module.exports = function (app) {
       .post(vacation.login);
 
   app.route('/register')
-      .post(vacation.list_all_tasks);
+      .post(vacation.register);
 
   app.route('/verifyAnswer')
       .post(vacation.list_all_tasks);

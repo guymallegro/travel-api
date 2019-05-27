@@ -7,12 +7,11 @@ var poolConfig = {
     log: true
 };
 
-// TODO: edit this
 var connectionConfig = {
-    userName: 'vacation-api',
-    password: 'Assignment3',
-    server: 'vacation-apidb.database.windows.net',
-    options: {encrypt: true, database: ''}
+    userName: 'gs',
+    password: 'db!12345678',
+    server: 'assignment3webdevgs.database.windows.net',
+    options: {encrypt: true, database: 'db'}
 };
 
 var pool = new ConnectionPool(poolConfig, connectionConfig)
@@ -28,9 +27,7 @@ console.log('pool connection on');
 
 exports.execQuery = function (query) {
     return new Promise(function (resolve, reject) {
-
         try {
-
             var ans = [];
             var properties = [];
 
@@ -62,7 +59,6 @@ exports.execQuery = function (query) {
                     }
                     ans.push(item);
                 });
-
                 dbReq.on('requestCompleted', function () {
                     console.log('request Completed: ' + dbReq.rowCount + ' row(s) returned');
                     console.log(ans);
