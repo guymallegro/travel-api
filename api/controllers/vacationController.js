@@ -184,16 +184,50 @@ exports.addReview = function (req, res) {
 
 }
 
-exports.updatePOIRank = function (req, res) {
-    DButilsAzure.execQuery("UPDATE POI SET rank='"+req.body.rank+"' WHERE poiName='"+req.body.poiName+"'" +
-        "UPDATE usersRanks SET rank='"+req.body.rank+"' WHERE poiName='"+req.body.poiName+
-        "' AND userName='"+req.body.userName+"'");
+
+exports.setUserRank = function (req, res) {
+    DButilsAzure.execQuery("SELECT rank FROM UsersRanks WHERE (userName='" + req.body.userName + "') AND" +
+        " (poiName='" + req.body.poiName + "')")
+        .then(function (result) {
+            if (result == 0) {
+                DButilsAzure.execQuery("INSERT INTO usersRanks (userName, poiName, rank) VALUES " +
+                    "('"+req.body.userName+ "','"+req.body.poiName+"','"+req.body.rank+"')")
+                    .then(function (pass) {
+                        res.send(pass);
+                    })
+                    .catch(function (err) {
+                        res.send(err)
+                    })
+            } else {
+                DButilsAzure.execQuery("UPDATE usersRanks SET rank='"+req.body.rank+"' WHERE poiName='"+req.body.poiName+
+                    "' AND userName='"+req.body.userName+"'")
+                    .then(function (pass) {
+                        res.send(pass);
+                    })
+                    .catch(function (err) {
+                        res.send(err)
+                    })
+            }
+        })
+        .catch(function (err) {
+            res.send(err)
+        })
 }
 
 exports.getAllRanks = function (req, res) {
     DButilsAzure.execQuery("SELECT * FROM usersRanks")
         .then(function (result) {
             res.send(result)
+        })
+        .catch(function (err) {
+            res.send(err)
+        })
+}
+
+exports.updatePOIRank = function (req, res) {
+    DButilsAzure.execQuery("UPDATE POI SET rank='"+req.body.rank+"' WHERE poiName='"+req.body.poiName+"'")
+        .then(function (pass) {
+            res.send(pass);
         })
         .catch(function (err) {
             res.send(err)

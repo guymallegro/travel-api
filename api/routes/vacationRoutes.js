@@ -28,4 +28,7 @@ module.exports = function (app) {
 
     app.route('/updatePOIRank')
         .put(vacation.updatePOIRank);
+
+    app.route('/setUserRank')
+        .put(vacation.setUserRank);
 };
