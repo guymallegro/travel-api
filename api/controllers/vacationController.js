@@ -6,8 +6,13 @@ const app = express();
 const jwt = require("jsonwebtoken");
 app.use(express.json());
 let secret = "thisIsASecret";
+let countries = ["Australia", "Bolivia", "China", "Denemark", "Israel", "Latvia", "Monaco", "August", "Norway",
+    "Panama", "Switzerland", "USA"]
 
 exports.register = function (req, res) {
+    if(!countries.includes(req.body.country)){
+        res.status(400).send("The given country is not supported.")
+    }
     DButilsAzure.execQuery("INSERT INTO Users (userName, password, firstName, lastName, country, city, email)\n" +
         "VALUES (" + req.body.userName + "," + req.body.password + "," + req.body.firstName + "," + req.body.lastName + "," +
         req.body.country + "," + req.body.city + "," + req.body.email + ")")
@@ -126,7 +131,7 @@ exports.getPOIDetails = function (req, res) {
     DButilsAzure.execQuery("Select distinct POI.category, POI.description, POI.watchedAmount, POI.rank,\n" +
         "POIReviews.dateFirstReview, POIReviews.firstReview, POIReviews.dateSecondReview,\n" +
         "POIReviews.secondReview\n" +
-        "from POI join POIReviews on POIReviews.poiName=POI.poiName and POI.poiName='"+req.body.poiName+"'")
+        "from POI join POIReviews on POIReviews.poiName=POI.poiName and POI.poiName='" + req.body.poiName + "'")
         .then(function (result) {
             res.send(result);
         })
@@ -137,7 +142,7 @@ exports.getPOIDetails = function (req, res) {
 
 exports.getUserQuestions = function (req, res) {
     DButilsAzure.execQuery("SELECT * FROM UsersQuestions\n" +
-        "WHERE (userName = '" + req.body.userName+"')")
+        "WHERE (userName = '" + req.body.userName + "')")
         .then(function (result) {
             res.send(result)
         })
@@ -161,7 +166,7 @@ exports.getAllPOI = function (req, res) {
 
 exports.addReview = function (req, res) {
     auth(req, res);
-    if(req.body.firstReview){
+    if (req.body.firstReview) {
         DButilsAzure.execQuery("UPDATE POIReviews " +
             "SET firstReview = '" + req.body.review + "', dateFirstReview = '" + req.body.date + "'" +
             "WHERE (poiName='" + req.body.poi + "')")
@@ -171,7 +176,7 @@ exports.addReview = function (req, res) {
             .catch(function (err) {
                 res.send(err)
             })
-    }else{
+    } else {
         DButilsAzure.execQuery("UPDATE POIReviews " +
             "SET secondReview = '" + req.body.review + "', dateSecondReview = '" + req.body.date + "'" +
             "WHERE (poiName='" + req.body.poi + "')")
@@ -185,7 +190,17 @@ exports.addReview = function (req, res) {
 
 }
 
-
+exports.removeFavoritePOI = function (req, res) {
+    let userName = auth(req, res);
+    DButilsAzure.execQuery("DELETE FROM UsersFavoritePOI " +
+        "WHERE (userName = '" + userName + "') AND (point = '" + req.body.poi + "')")
+        .then(function (result) {
+            res.send(result)
+        })
+        .catch(function (err) {
+            res.send(err)
+        })
+}
 
 exports.setUserRank = function (req, res) {
     DButilsAzure.execQuery("SELECT rank FROM UsersRanks WHERE (userName='" + req.body.userName + "') AND" +
@@ -214,6 +229,12 @@ exports.setUserRank = function (req, res) {
         .catch(function (err) {
             res.send(err)
         })
+}
+
+exports.updatePOIRank = function (req, res) {
+    DButilsAzure.execQuery("UPDATE POI SET rank='" + req.body.rank + "' WHERE poiName='" + req.body.poiName + "'" +
+        "UPDATE usersRanks SET rank='" + req.body.rank + "' WHERE poiName='" + req.body.poiName +
+        "' AND userName='" + req.body.userName + "'");
 }
 
 exports.getAllRanks = function (req, res) {
