@@ -20,7 +20,7 @@ module.exports = function (app) {
   app.route('/getPOIDetails')
       .get(vacation.list_all_tasks);
 
-  app.route('/getUserQuestion')
+  app.route('/getUserQuestions')
       .get(vacation.list_all_tasks);
 
   app.route('/GetRandomPIO')

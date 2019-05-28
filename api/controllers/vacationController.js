@@ -106,7 +106,7 @@ exports.getPOIDetails = function (req, res) {
         })
 };
 
-exports.getUserQuestion = function (req, res) {
+exports.getUserQuestions = function (req, res) {
     DButilsAzure.execQuery("SELECT * FROM UsersQuestions\n" +
         "WHERE (userName = '" + req.body.userName+"')")
         .then(function (result) {
