@@ -11,8 +11,8 @@ module.exports = function (app) {
   app.route('/verifyAnswer')
       .post(vacation.verifyAnswer);
 
-  app.route('/getMostPopular')
-      .post(vacation.list_all_tasks);
+  app.route('/getUserInterests')
+      .post(vacation.getUserInterests);
 
   app.route('/getFavorites')
       .post(vacation.list_all_tasks);

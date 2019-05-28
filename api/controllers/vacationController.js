@@ -1,3 +1,5 @@
+
+
 'use strict';
 let DButilsAzure = require('../../DButils');
 var User = require('../models/user');
@@ -31,7 +33,7 @@ exports.login = function (req, res) {
                 res.send(token);
             }
             else{
-                res.send("Invalid username or password")
+                res.status(400).send("Invalid username or password")
             }
         })
         .catch(function (err) {
@@ -46,8 +48,20 @@ exports.verifyAnswer = function (req, res) {
             res.send(result);
             console.log(result);
         })
-
     res.send("TEST");
+};
+
+exports.getUserInterests = function (req, res) {
+    let userName = auth(req, res)
+    DButilsAzure.execQuery("SELECT firstInterest, secondInterest FROM UsersInterests\n" +
+        "WHERE (userName = '" + userName+"')")
+        .then(function (result) {
+            res.send(result)
+        })
+        .catch(function (err) {
+            console.log(err)
+            res.send(err)
+        })
 };
 
 exports.list_all_tasks = function (req, res) {
@@ -57,3 +71,14 @@ exports.list_all_tasks = function (req, res) {
 exports.list_all_tasks = function (req, res) {
     res.send("TEST");
 };
+
+function auth(req, res){
+    const token = req.header("x-auth-token");
+    if (!token) res.status(400).send("Access denied. No token provided.");
+    try {
+        req.decoded = jwt.verify(token, secret);
+    } catch (exception) {
+        res.status(400).send("Invalid token.");
+    }
+    return req.decoded.name;
+}
