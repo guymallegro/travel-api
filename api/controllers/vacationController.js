@@ -160,6 +160,7 @@ exports.getAllPOI = function (req, res) {
 }
 
 exports.addReview = function (req, res) {
+    auth(req, res);
     if(req.body.firstReview){
         DButilsAzure.execQuery("UPDATE POIReviews " +
             "SET firstReview = '" + req.body.review + "', dateFirstReview = '" + req.body.date + "'" +
@@ -182,6 +183,18 @@ exports.addReview = function (req, res) {
             })
     }
 
+}
+
+exports.removeFavoritePOI = function (req, res) {
+    let userName = auth(req, res);
+    DButilsAzure.execQuery("DELETE FROM UsersFavoritePOI " +
+        "WHERE (userName = '" + userName + "') AND (point = '" + req.body.poi + "')")
+        .then(function (result) {
+            res.send(result)
+        })
+        .catch(function (err) {
+            res.send(err)
+        })
 }
 
 exports.updatePOIRank = function (req, res) {
