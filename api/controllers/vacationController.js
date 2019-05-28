@@ -72,8 +72,19 @@ exports.getUserInterests = function (req, res) {
         })
 };
 
-exports.list_all_tasks = function (req, res) {
-    res.send("TEST");
+exports.getUserFavorites = function (req, res) {
+    let userName = auth(req, res)
+    DButilsAzure.execQuery("SELECT * FROM POI u\n" +
+        "JOIN UsersFavoritePOI " +
+        "ON poiName = point " +
+        "WHERE (userName='"+userName+"')")
+        .then(function (result) {
+            res.send(result)
+        })
+        .catch(function (err) {
+            console.log(err)
+            res.send(err)
+        })
 };
 
 exports.list_all_tasks = function (req, res) {

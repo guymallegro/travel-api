@@ -14,8 +14,8 @@ module.exports = function (app) {
   app.route('/getUserInterests')
       .post(vacation.getUserInterests);
 
-  app.route('/getFavorites')
-      .post(vacation.list_all_tasks);
+  app.route('/getUserFavorites')
+      .post(vacation.getUserFavorites);
 
   app.route('/getPOI')
       .get(vacation.list_all_tasks);
