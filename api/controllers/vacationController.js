@@ -97,7 +97,7 @@ exports.getUserFavorites = function (req, res) {
 };
 
 exports.getPOIDetails = function (req, res) {
-    DButilsAzure.execQuery("Select POI.category, POI.description, POI.watchedAmount, POI.rank,\n" +
+    DButilsAzure.execQuery("Select distinct POI.category, POI.description, POI.watchedAmount, POI.rank,\n" +
         "POIReviews.dateFirstReview, POIReviews.firstReview, POIReviews.dateSecondReview,\n" +
         "POIReviews.secondReview\n" +
         "from POI join POIReviews on POIReviews.poiName=POI.poiName and POI.poiName='"+req.body.poiName+"'")
@@ -112,6 +112,19 @@ exports.getPOIDetails = function (req, res) {
 exports.getUserQuestions = function (req, res) {
     DButilsAzure.execQuery("SELECT * FROM UsersQuestions\n" +
         "WHERE (userName = '" + req.body.userName+"')")
+        .then(function (result) {
+            res.send(result)
+        })
+        .catch(function (err) {
+            res.send(err)
+        })
+}
+
+exports.getAllPOI = function (req, res) {
+    DButilsAzure.execQuery("Select distinct POI.category, POI.description, POI.watchedAmount, POI.rank,\n" +
+        "POIReviews.dateFirstReview, POIReviews.firstReview, POIReviews.dateSecondReview,\n" +
+        "POIReviews.secondReview\n" +
+        "from POI join POIReviews on POIReviews.poiName=POI.poiName")
         .then(function (result) {
             res.send(result)
         })
