@@ -234,6 +234,10 @@ exports.removeFavoritePOI = function (req, res) {
 }
 
 exports.setUserRank = function (req, res) {
+    if (req.body.rank < 1 || req.body.rank > 5){
+        res.status(400).send("rank should be between 1 and 5.")
+        return;
+    }
     DButilsAzure.execQuery("SELECT rank FROM UsersRanks WHERE (userName='" + req.body.userName + "') AND" +
         " (poiName='" + req.body.poiName + "')")
         .then(function (result) {
@@ -273,6 +277,10 @@ exports.getAllRanks = function (req, res) {
 }
 
 exports.updatePOIRank = function (req, res) {
+    if (req.body.rank < 1 || req.body.rank > 5){
+        res.status(400).send("rank should be between 1 and 5.")
+        return;
+    }
     DButilsAzure.execQuery("UPDATE POI SET rank='"+req.body.rank+"' WHERE poiName='"+req.body.poiName+"'")
         .then(function (pass) {
             res.send(pass);
