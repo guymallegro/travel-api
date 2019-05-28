@@ -17,6 +17,36 @@ module.exports = function (app) {
   app.route('/getUserFavorites')
       .post(vacation.getUserFavorites);
 
+  app.route('/getPOIDetails')
+      .get(vacation.list_all_tasks);
+
+  app.route('/getQuestion')
+      .get(vacation.list_all_tasks);
+
+  app.route('/GetRandomPIO')
+      .get(vacation.list_all_tasks);
+
+  app.route('/getRecommendedPOI')
+      .get(vacation.list_all_tasks);
+
+  app.route('/getAllPOI')
+      .get(vacation.list_all_tasks);
+
+  app.route('/searchByName')
+      .get(vacation.list_all_tasks);
+
   app.route('/updateUser')
-      .get(vacation.updateUser);
+      .put(vacation.list_all_tasks);
+
+  app.route('/addToFavorites')
+      .put(vacation.list_all_tasks);
+
+  app.route('/addRank')
+      .put(vacation.list_all_tasks);
+
+  app.route('/addReview')
+      .put(vacation.list_all_tasks);
+
+  app.route('/removePOI')
+      .delete(vacation.list_all_tasks);
 };
