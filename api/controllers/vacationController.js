@@ -10,6 +10,22 @@ let countries = ["Australia", "Bolivia", "China", "Denemark", "Israel", "Latvia"
     "Panama", "Switzerland", "USA"]
 
 exports.register = function (req, res) {
+    if (req.body.userName.length < 3 || req.body.userName.length > 8){
+        res.status(400).send("user name should be between 3 and 8 chars.")
+        return;
+    }
+    if (!(/^[a-zA-Z]+$/.test(req.body.userName))){
+        res.status(400).send("user name should contains letters only.")
+        return;
+    }
+    if (req.body.password.length < 5 || req.body.password.length > 10){
+        res.status(400).send("password should be between 5 and 10 chars.")
+        return;
+    }
+    if (!req.body.password.match("^(?=.*[A-Za-z])(?=.*[0-9])[A-Za-z0-9]+$")){
+        res.status(400).send("password should contains both letters and numbers.")
+        return;
+    }
     if(!countries.includes(req.body.country)){
         res.status(400).send("The given country is not supported.")
         return;
