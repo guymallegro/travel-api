@@ -17,8 +17,14 @@ module.exports = function (app) {
     app.route('/getUserFavorites')
         .post(vacation.getUserFavorites);
 
+    app.route('/getUser')
+        .post(vacation.getUser);
+
     app.route('/updateUser')
         .put(vacation.updateUser);
+
+    app.route('/addReview')
+        .put(vacation.addReview);
 
     app.route('/updatePOIRank')
         .put(vacation.updatePOIRank);

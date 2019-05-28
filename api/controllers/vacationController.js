@@ -109,6 +109,19 @@ exports.updateUser = function (req, res) {
         })
 };
 
+exports.getUser = function (req, res) {
+    let userName = auth(req, res)
+    DButilsAzure.execQuery("SELECT * FROM Users " +
+        "WHERE (userName='" + userName + "')")
+        .then(function (result) {
+            res.send(result)
+        })
+        .catch(function (err) {
+            console.log(err)
+            res.send(err)
+        })
+};
+
 exports.getPOIDetails = function (req, res) {
     DButilsAzure.execQuery("Select distinct POI.category, POI.description, POI.watchedAmount, POI.rank,\n" +
         "POIReviews.dateFirstReview, POIReviews.firstReview, POIReviews.dateSecondReview,\n" +
@@ -146,6 +159,31 @@ exports.getAllPOI = function (req, res) {
         })
 }
 
+exports.addReview = function (req, res) {
+    if(req.body.firstReview){
+        DButilsAzure.execQuery("UPDATE POIReviews " +
+            "SET firstReview = '" + req.body.review + "', dateFirstReview = '" + req.body.date + "'" +
+            "WHERE (poiName='" + req.body.poi + "')")
+            .then(function (result) {
+                res.send(result)
+            })
+            .catch(function (err) {
+                res.send(err)
+            })
+    }else{
+        DButilsAzure.execQuery("UPDATE POIReviews " +
+            "SET secondReview = '" + req.body.review + "', dateSecondReview = '" + req.body.date + "'" +
+            "WHERE (poiName='" + req.body.poi + "')")
+            .then(function (result) {
+                res.send(result)
+            })
+            .catch(function (err) {
+                res.send(err)
+            })
+    }
+
+}
+
 exports.updatePOIRank = function (req, res) {
     DButilsAzure.execQuery("UPDATE POI SET rank='"+req.body.rank+"' WHERE poiName='"+req.body.poiName+"'" +
         "UPDATE usersRanks SET rank='"+req.body.rank+"' WHERE poiName='"+req.body.poiName+
@@ -161,7 +199,6 @@ exports.getAllRanks = function (req, res) {
             res.send(err)
         })
 }
-
 
 function auth(req, res) {
     const token = req.header("x-auth-token");
