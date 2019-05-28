@@ -146,6 +146,22 @@ exports.getAllPOI = function (req, res) {
         })
 }
 
+exports.updatePOIRank = function (req, res) {
+    DButilsAzure.execQuery("UPDATE POI SET rank='"+req.body.rank+"' WHERE poiName='"+req.body.poiName+"'" +
+        "UPDATE usersRanks SET rank='"+req.body.rank+"' WHERE poiName='"+req.body.poiName+
+        "' AND userName='"+req.body.userName+"'");
+}
+
+exports.getAllRanks = function (req, res) {
+    DButilsAzure.execQuery("SELECT * FROM usersRanks")
+        .then(function (result) {
+            res.send(result)
+        })
+        .catch(function (err) {
+            res.send(err)
+        })
+}
+
 
 function auth(req, res) {
     const token = req.header("x-auth-token");

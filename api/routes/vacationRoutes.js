@@ -20,4 +20,6 @@ module.exports = function (app) {
     app.route('/updateUser')
         .put(vacation.updateUser);
 
+    app.route('/updatePOIRank')
+        .put(vacation.updatePOIRank);
 };
