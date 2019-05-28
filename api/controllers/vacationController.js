@@ -73,7 +73,7 @@ exports.verifyAnswer = function (req, res) {
 
 exports.getUserRecommendation = function (req, res) {
     let userName = auth(req, res)
-    DButilsAzure.execQuery("SELECT poiName, category, description, watchedAmount, rank FROM UsersInterests " +
+    DButilsAzure.execQuery("SELECT poiName, category, description, watchedAmount, rank, image FROM UsersInterests " +
         "JOIN POI " +
         "ON firstInterest = category OR secondInterest = category " +
         "WHERE (userName = '" + userName + "') " +
@@ -131,7 +131,7 @@ exports.getUser = function (req, res) {
 };
 
 exports.getPOIDetails = function (req, res) {
-    DButilsAzure.execQuery("Select distinct POI.category, POI.description, POI.watchedAmount, POI.rank,\n" +
+    DButilsAzure.execQuery("Select distinct POI.category, POI.description, POI.watchedAmount, POI.rank, POI.image,\n" +
         "POIReviews.dateFirstReview, POIReviews.firstReview, POIReviews.dateSecondReview,\n" +
         "POIReviews.secondReview\n" +
         "from POI join POIReviews on POIReviews.poiName=POI.poiName and POI.poiName='" + req.body.poiName + "'")
@@ -155,7 +155,7 @@ exports.getUserQuestions = function (req, res) {
 }
 
 exports.getAllPOI = function (req, res) {
-    DButilsAzure.execQuery("Select distinct POI.category, POI.description, POI.watchedAmount, POI.rank,\n" +
+    DButilsAzure.execQuery("Select distinct POI.category, POI.description, POI.watchedAmount, POI.rank, POI.image,\n" +
         "POIReviews.dateFirstReview, POIReviews.firstReview, POIReviews.dateSecondReview,\n" +
         "POIReviews.secondReview\n" +
         "from POI join POIReviews on POIReviews.poiName=POI.poiName")
@@ -191,6 +191,18 @@ exports.addReview = function (req, res) {
             })
     }
 
+}
+
+exports.addFavoritePOI = function (req,res) {
+    let userName = auth(req, res);
+    DButilsAzure.execQuery("INSERT INTO UsersFavoritePOI " +
+        "VALUES ('"+userName+"','" + req.body.poi + "')")
+        .then(function (result) {
+            res.send(result)
+        })
+        .catch(function (err) {
+            res.send(err)
+        })
 }
 
 exports.removeFavoritePOI = function (req, res) {
@@ -232,12 +244,6 @@ exports.setUserRank = function (req, res) {
         .catch(function (err) {
             res.send(err)
         })
-}
-
-exports.updatePOIRank = function (req, res) {
-    DButilsAzure.execQuery("UPDATE POI SET rank='" + req.body.rank + "' WHERE poiName='" + req.body.poiName + "'" +
-        "UPDATE usersRanks SET rank='" + req.body.rank + "' WHERE poiName='" + req.body.poiName +
-        "' AND userName='" + req.body.userName + "'");
 }
 
 exports.getAllRanks = function (req, res) {
