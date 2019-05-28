@@ -32,6 +32,9 @@ module.exports = function (app) {
     app.route('/setUserRank')
         .put(vacation.setUserRank);
 
+    app.route('/addFavoritePOI')
+        .put(vacation.addFavoritePOI);
+
     app.route('/removeFavoritePOI')
         .delete(vacation.removeFavoritePOI);
 };
