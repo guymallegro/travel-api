@@ -54,7 +54,13 @@ exports.verifyAnswer = function (req, res) {
                     .then(function (pass) {
                         res.send(pass);
                     })
+                    .catch(function (err) {
+                        res.send(err)
+                    })
             }
+        })
+        .catch(function (err) {
+            res.send(err)
         })
 };
 
@@ -91,15 +97,26 @@ exports.getPOIDetails = function (req, res) {
     DButilsAzure.execQuery("Select POI.category, POI.description, POI.watchedAmount, POI.rank,\n" +
         "POIReviews.dateFirstReview, POIReviews.firstReview, POIReviews.dateSecondReview,\n" +
         "POIReviews.secondReview\n" +
-        "from POI join POIReviews on POIReviews.poiName=POI.poiName and POI.poiName='"+req.body.firstQuestion+"'")
+        "from POI join POIReviews on POIReviews.poiName=POI.poiName and POI.poiName='"+req.body.poiName+"'")
         .then(function (result) {
             res.send(result);
         })
+        .catch(function (err) {
+            res.send(err)
+        })
 };
 
-exports.list_all_tasks = function (req, res) {
-    res.send("TEST");
-};
+exports.getUserQuestion = function (req, res) {
+    DButilsAzure.execQuery("SELECT * FROM UsersQuestions\n" +
+        "WHERE (userName = '" + req.body.userName+"')")
+        .then(function (result) {
+            res.send(result)
+        })
+        .catch(function (err) {
+            res.send(err)
+        })
+}
+
 
 function auth(req, res){
     const token = req.header("x-auth-token");
