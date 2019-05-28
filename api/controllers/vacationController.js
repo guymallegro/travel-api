@@ -109,6 +109,19 @@ exports.updateUser = function (req, res) {
         })
 };
 
+exports.getUser = function (req, res) {
+    let userName = auth(req, res)
+    DButilsAzure.execQuery("SELECT * FROM Users " +
+        "WHERE (userName='" + userName + "')")
+        .then(function (result) {
+            res.send(result)
+        })
+        .catch(function (err) {
+            console.log(err)
+            res.send(err)
+        })
+};
+
 exports.getPOIDetails = function (req, res) {
     DButilsAzure.execQuery("Select distinct POI.category, POI.description, POI.watchedAmount, POI.rank,\n" +
         "POIReviews.dateFirstReview, POIReviews.firstReview, POIReviews.dateSecondReview,\n" +
