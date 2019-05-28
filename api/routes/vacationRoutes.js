@@ -36,7 +36,7 @@ module.exports = function (app) {
       .get(vacation.list_all_tasks);
 
   app.route('/updateUser')
-      .put(vacation.list_all_tasks);
+      .put(vacation.updateUser);
 
   app.route('/addToFavorites')
       .put(vacation.list_all_tasks);
