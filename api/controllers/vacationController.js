@@ -12,6 +12,7 @@ let countries = ["Australia", "Bolivia", "China", "Denemark", "Israel", "Latvia"
 exports.register = function (req, res) {
     if(!countries.includes(req.body.country)){
         res.status(400).send("The given country is not supported.")
+        return;
     }
     DButilsAzure.execQuery("INSERT INTO Users (userName, password, firstName, lastName, country, city, email)\n" +
         "VALUES (" + req.body.userName + "," + req.body.password + "," + req.body.firstName + "," + req.body.lastName + "," +
