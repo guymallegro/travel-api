@@ -41,11 +41,15 @@ exports.login = function (req, res) {
 };
 
 exports.verifyAnswer = function (req, res) {
-    DButilsAzure.execQuery("SELECT * FROM UsersQuestions WHERE (userName='"+req.body.userName+ "' AND firstQuestion='"+req.body.firstQuesstion + "' AND firstAnswer='"+req.body.firstAnswer+"')")
+    DButilsAzure.execQuery("SELECT * FROM UsersQuestions WHERE (userName='"+req.body.userName+ "') AND" +
+        "(firstQuestion='"+req.body.firstQuestion + "') AND (firstAnswer='"+req.body.firstAnswer+"')")
         .then(function (result) {
-            if (result == 0)
+            if (result == 0) {
+                console.log(result);
                 res.send("Incorrect answer. Please try again");
+            }
             else{
+                console.log(result);
                 DButilsAzure.execQuery("SELECT password FROM Users WHERE (userName='"+req.body.userName+"')")
                     .then(function (pass) {
                         res.send(pass);
