@@ -159,6 +159,30 @@ exports.getAllPOI = function (req, res) {
         })
 }
 
+exports.addReview = function (req, res) {
+    if(req.body.firstReview){
+        DButilsAzure.execQuery("UPDATE POIReviews " +
+            "SET firstReview = '" + req.body.review + "', dateFirstReview = '" + req.body.date + "'" +
+            "WHERE (poiName='" + req.body.poi + "')")
+            .then(function (result) {
+                res.send(result)
+            })
+            .catch(function (err) {
+                res.send(err)
+            })
+    }else{
+        DButilsAzure.execQuery("UPDATE POIReviews " +
+            "SET secondReview = '" + req.body.review + "', dateSecondReview = '" + req.body.date + "'" +
+            "WHERE (poiName='" + req.body.poi + "')")
+            .then(function (result) {
+                res.send(result)
+            })
+            .catch(function (err) {
+                res.send(err)
+            })
+    }
+
+}
 
 function auth(req, res) {
     const token = req.header("x-auth-token");
