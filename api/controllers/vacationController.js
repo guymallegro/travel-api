@@ -1,5 +1,3 @@
-
-
 'use strict';
 let DButilsAzure = require('../../DButils');
 var User = require('../models/user');
@@ -43,13 +41,23 @@ exports.login = function (req, res) {
 };
 
 exports.verifyAnswer = function (req, res) {
-    DButilsAzure.execQuery("SELECT * FROM UsersQuestions where userName ='" + req.body.userName + "' AND firstQuestion='" + req.body.firstQuesstion + "' AND firstAnswer='" + req.body.firstAnswer + "'")
+    DButilsAzure.execQuery("SELECT * FROM UsersQuestions WHERE (userName='"+req.body.userName+ "') AND" +
+        "(firstQuestion='"+req.body.firstQuestion + "') AND (firstAnswer='"+req.body.firstAnswer+"')")
         .then(function (result) {
-            res.send(result);
-            console.log(result);
+            if (result == 0) {
+                console.log(result);
+                res.send("Incorrect answer. Please try again");
+            }
+            else{
+                console.log(result);
+                DButilsAzure.execQuery("SELECT password FROM Users WHERE (userName='"+req.body.userName+"')")
+                    .then(function (pass) {
+                        res.send(pass);
+                    })
+            }
         })
-    res.send("TEST");
 };
+
 
 exports.getUserInterests = function (req, res) {
     let userName = auth(req, res)
