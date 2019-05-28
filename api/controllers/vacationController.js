@@ -14,9 +14,11 @@ exports.register = function (req, res) {
         res.status(400).send("The given country is not supported.")
         return;
     }
-    DButilsAzure.execQuery("INSERT INTO Users (userName, password, firstName, lastName, country, city, email)\n" +
-        "VALUES (" + req.body.userName + "," + req.body.password + "," + req.body.firstName + "," + req.body.lastName + "," +
-        req.body.country + "," + req.body.city + "," + req.body.email + ")")
+    DButilsAzure.execQuery("INSERT INTO Users (userName, password, firstName, lastName, country, city, email)" +
+        "VALUES ('" + req.body.userName + "','" + req.body.password + "','" + req.body.firstName + "','" + req.body.lastName + "','" +
+        req.body.country + "','" + req.body.city + "','" + req.body.email + "') " +
+        "INSERT INTO UsersInterests (userName, firstInterest, secondInterest) " +
+        "VALUES ('" + req.body.userName + "','" + req.body.firstInterest + "','" + req.body.secondInterest +"')")
         .then(function (result) {
             res.send(result)
         })
