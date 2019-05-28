@@ -22,15 +22,14 @@ exports.register = function (req, res) {
 
 exports.login = function (req, res) {
     DButilsAzure.execQuery("SELECT * FROM Users \n" +
-        "WHERE (userName = '" + req.body.userName+"') AND (password = '" + req.body.password+"')")
+        "WHERE (userName = '" + req.body.userName + "') AND (password = '" + req.body.password + "')")
         .then(function (result) {
-            if(result.length === 1) {
+            if (result.length === 1) {
                 let payload = {name: req.body.userName};
                 let options = {expiresIn: "1d"};
                 const token = jwt.sign(payload, secret, options);
                 res.send(token);
-            }
-            else{
+            } else {
                 res.status(400).send("Invalid username or password")
             }
         })
@@ -41,16 +40,15 @@ exports.login = function (req, res) {
 };
 
 exports.verifyAnswer = function (req, res) {
-    DButilsAzure.execQuery("SELECT * FROM UsersQuestions WHERE (userName='"+req.body.userName+ "') AND" +
-        "(firstQuestion='"+req.body.firstQuestion + "') AND (firstAnswer='"+req.body.firstAnswer+"')")
+    DButilsAzure.execQuery("SELECT * FROM UsersQuestions WHERE (userName='" + req.body.userName + "') AND" +
+        "(firstQuestion='" + req.body.firstQuestion + "') AND (firstAnswer='" + req.body.firstAnswer + "')")
         .then(function (result) {
             if (result == 0) {
                 console.log(result);
                 res.send("Incorrect answer. Please try again");
-            }
-            else{
+            } else {
                 console.log(result);
-                DButilsAzure.execQuery("SELECT password FROM Users WHERE (userName='"+req.body.userName+"')")
+                DButilsAzure.execQuery("SELECT password FROM Users WHERE (userName='" + req.body.userName + "')")
                     .then(function (pass) {
                         res.send(pass);
                     })
@@ -70,7 +68,7 @@ exports.getUserRecommendation = function (req, res) {
     DButilsAzure.execQuery("SELECT poiName, category, description, watchedAmount, rank FROM UsersInterests " +
         "JOIN POI " +
         "ON firstInterest = category OR secondInterest = category " +
-        "WHERE (userName = '" + userName+"') " +
+        "WHERE (userName = '" + userName + "') " +
         "ORDER BY rank DESC")
         .then(function (result) {
             res.send(result)
@@ -86,7 +84,22 @@ exports.getUserFavorites = function (req, res) {
     DButilsAzure.execQuery("SELECT * FROM POI " +
         "JOIN UsersFavoritePOI " +
         "ON poiName = point " +
-        "WHERE (userName='"+userName+"')")
+        "WHERE (userName='" + userName + "')")
+        .then(function (result) {
+            res.send(result)
+        })
+        .catch(function (err) {
+            console.log(err)
+            res.send(err)
+        })
+};
+
+exports.updateUser = function (req, res) {
+    let userName = auth(req, res)
+    DButilsAzure.execQuery("UPDATE Users " +
+        "SET password ='" + req.body.password + "', firstName = '" + req.body.firstName + "', lastName = '" +
+        req.body.lastName + "', city = '" + req.body.city + "', country = '" + req.body.country + "', email = '" + req.body.email + "'" +
+        "WHERE (userName='" + userName + "')")
         .then(function (result) {
             res.send(result)
         })
@@ -134,7 +147,7 @@ exports.getAllPOI = function (req, res) {
 }
 
 
-function auth(req, res){
+function auth(req, res) {
     const token = req.header("x-auth-token");
     if (!token) res.status(400).send("Access denied. No token provided.");
     try {
