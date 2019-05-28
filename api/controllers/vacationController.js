@@ -59,10 +59,13 @@ exports.verifyAnswer = function (req, res) {
 };
 
 
-exports.getUserInterests = function (req, res) {
+exports.getUserRecommendation = function (req, res) {
     let userName = auth(req, res)
-    DButilsAzure.execQuery("SELECT firstInterest, secondInterest FROM UsersInterests\n" +
-        "WHERE (userName = '" + userName+"')")
+    DButilsAzure.execQuery("SELECT poiName, category, description, watchedAmount, rank FROM UsersInterests " +
+        "JOIN POI " +
+        "ON firstInterest = category OR secondInterest = category " +
+        "WHERE (userName = '" + userName+"') " +
+        "ORDER BY rank DESC")
         .then(function (result) {
             res.send(result)
         })
@@ -74,7 +77,7 @@ exports.getUserInterests = function (req, res) {
 
 exports.getUserFavorites = function (req, res) {
     let userName = auth(req, res)
-    DButilsAzure.execQuery("SELECT * FROM POI u\n" +
+    DButilsAzure.execQuery("SELECT * FROM POI u" +
         "JOIN UsersFavoritePOI " +
         "ON poiName = point " +
         "WHERE (userName='"+userName+"')")
@@ -87,8 +90,19 @@ exports.getUserFavorites = function (req, res) {
         })
 };
 
-exports.list_all_tasks = function (req, res) {
-    res.send("TEST");
+exports.updateUser = function (req, res) {
+    let userName = auth(req, res)
+    DButilsAzure.execQuery("SELECT * FROM POI u\n" +
+        "JOIN UsersFavoritePOI " +
+        "ON poiName = point " +
+        "WHERE (userName='"+userName+"')")
+        .then(function (result) {
+            res.send(result)
+        })
+        .catch(function (err) {
+            console.log(err)
+            res.send(err)
+        })
 };
 
 function auth(req, res){

@@ -11,42 +11,12 @@ module.exports = function (app) {
   app.route('/verifyAnswer')
       .post(vacation.verifyAnswer);
 
-  app.route('/getUserInterests')
-      .post(vacation.getUserInterests);
+  app.route('/getUserRecommendation')
+      .post(vacation.getUserRecommendation);
 
   app.route('/getUserFavorites')
       .post(vacation.getUserFavorites);
 
-  app.route('/getPOI')
-      .get(vacation.list_all_tasks);
-
-  app.route('/getQuestion')
-      .get(vacation.list_all_tasks);
-
-  app.route('/GetRandomPIO')
-      .get(vacation.list_all_tasks);
-
-  app.route('/getRecommendedPOI')
-      .get(vacation.list_all_tasks);
-
-  app.route('/getAllPOI')
-      .get(vacation.list_all_tasks);
-
-  app.route('/searchByName')
-      .get(vacation.list_all_tasks);
-
   app.route('/updateUser')
-      .put(vacation.list_all_tasks);
-
-  app.route('/addToFavorites')
-      .put(vacation.list_all_tasks);
-
-  app.route('/addRank')
-      .put(vacation.list_all_tasks);
-
-  app.route('/addReview')
-      .put(vacation.list_all_tasks);
-
-  app.route('/removePOI')
-      .delete(vacation.list_all_tasks);
+      .get(vacation.updateUser);
 };
