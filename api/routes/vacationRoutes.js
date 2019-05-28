@@ -11,8 +11,8 @@ module.exports = function (app) {
   app.route('/verifyAnswer')
       .post(vacation.verifyAnswer);
 
-  app.route('/getUserInterests')
-      .post(vacation.getUserInterests);
+  app.route('/getUserRecommendation')
+      .post(vacation.getUserRecommendation);
 
   app.route('/getUserFavorites')
       .post(vacation.getUserFavorites);
