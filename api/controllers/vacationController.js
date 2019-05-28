@@ -77,7 +77,7 @@ exports.getUserRecommendation = function (req, res) {
 
 exports.getUserFavorites = function (req, res) {
     let userName = auth(req, res)
-    DButilsAzure.execQuery("SELECT * FROM POI u\n" +
+    DButilsAzure.execQuery("SELECT * FROM POI " +
         "JOIN UsersFavoritePOI " +
         "ON poiName = point " +
         "WHERE (userName='"+userName+"')")
