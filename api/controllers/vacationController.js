@@ -160,6 +160,7 @@ exports.getAllPOI = function (req, res) {
 }
 
 exports.addReview = function (req, res) {
+    auth(req, res);
     if(req.body.firstReview){
         DButilsAzure.execQuery("UPDATE POIReviews " +
             "SET firstReview = '" + req.body.review + "', dateFirstReview = '" + req.body.date + "'" +
@@ -183,6 +184,7 @@ exports.addReview = function (req, res) {
     }
 
 }
+
 
 
 exports.setUserRank = function (req, res) {
