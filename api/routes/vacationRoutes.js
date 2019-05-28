@@ -17,7 +17,7 @@ module.exports = function (app) {
   app.route('/getUserFavorites')
       .post(vacation.getUserFavorites);
 
-  app.route('/getPOI')
+  app.route('/getPOIDetails')
       .get(vacation.list_all_tasks);
 
   app.route('/getQuestion')

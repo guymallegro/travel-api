@@ -87,6 +87,16 @@ exports.getUserFavorites = function (req, res) {
         })
 };
 
+exports.getPOIDetails = function (req, res) {
+    DButilsAzure.execQuery("Select POI.category, POI.description, POI.watchedAmount, POI.rank,\n" +
+        "POIReviews.dateFirstReview, POIReviews.firstReview, POIReviews.dateSecondReview,\n" +
+        "POIReviews.secondReview\n" +
+        "from POI join POIReviews on POIReviews.poiName=POI.poiName and POI.poiName='"+req.body.firstQuestion+"'")
+        .then(function (result) {
+            res.send(result);
+        })
+};
+
 exports.list_all_tasks = function (req, res) {
     res.send("TEST");
 };
