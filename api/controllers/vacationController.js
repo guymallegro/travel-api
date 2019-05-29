@@ -5,8 +5,12 @@ const app = express();
 const jwt = require("jsonwebtoken");
 app.use(express.json());
 let secret = "thisIsASecret";
-let countries = ["Australia", "Bolivia", "China", "Denemark", "Israel", "Latvia", "Monaco", "August", "Norway",
-    "Panama", "Switzerland", "USA"]
+var fs = require('fs'),
+    xml2js = require('xml2js');
+
+var parser = new xml2js.Parser();
+// let countries = ["Australia", "Bolivia", "China", "Denemark", "Israel", "Latvia", "Monaco", "August", "Norway",
+//     "Panama", "Switzerland", "USA"]
 
 exports.register = function (req, res) {
     if (!req.body.userName || !req.body.password || !req.body.firstName || !req.body.lastName || !req.body.country ||
@@ -32,10 +36,30 @@ exports.register = function (req, res) {
         res.status(400).send("password should contains both letters and numbers.");
         return;
     }
-    if (!countries.includes(req.body.country)) {
-        res.status(400).send("The given country is not supported.");
-        return;
-    }
+    const countriesFile = './resources/countries.xml';
+    fs.readFile(countriesFile, 'utf8', function (error, text) {
+        if (error)
+            res.status(500).send(`could not open "countries.xml" file: ${error}`);
+        else{
+            try{
+                parser.parseString(text, function (err, result) {
+                    const countries = result['Countries']['Country'];
+                    const countriesNames = countries.map((county)=>county.Name[0]);
+                    if (!countriesNames.includes(req.body.country)){
+                        res.status(400).send('The given country is not supported.')
+                    }
+                });
+            }
+            catch(err) {
+                res.status(400).send(`Could not parse file: countries.xml: ${error}`);
+            }
+        }
+
+    })
+    // if (!countries.includes(req.body.country)) {
+    //     res.status(400).send("The given country is not supported.");
+    //     return;
+    // }
     DButilsAzure.execQuery("INSERT INTO Users (userName, password, firstName, lastName, country, city, email)" +
         "VALUES ('" + req.body.userName + "','" + req.body.password + "','" + req.body.firstName + "','" + req.body.lastName + "','" +
         req.body.country + "','" + req.body.city + "','" + req.body.email + "') " +
