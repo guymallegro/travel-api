@@ -330,6 +330,10 @@ exports.setUserRank = function (req, res) {
 }
 
 exports.updateWatched = function (req, res) {
+    if (!req.body.poiName || !req.body.watchedAmount) {
+        res.status(400).send("The request is invalid, the required fields are : poiName, watchedAmount");
+        return;
+    }
     auth(req, res)
     DButilsAzure.execQuery("UPDATE POI SET watchedAmount='" + req.body.watchedAmount + "' WHERE poiName='" + req.body.poiName + "'")
         .then(function (pass) {
