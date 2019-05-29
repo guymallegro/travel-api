@@ -323,6 +323,18 @@ exports.setUserRank = function (req, res) {
                 DButilsAzure.execQuery("INSERT INTO usersRanks (userName, poiName, rank) VALUES " +
                     "('" + userName + "','" + req.body.poiName + "','" + req.body.rank + "')")
                     .catch(function (err) {
+                        DButilsAzure.execQuery("UPDATE POI " +
+                            "SET POI.rank = " +
+                            "(SELECT AVG(UsersRanks.rank) " +
+                            "FROM UsersRanks " +
+                            "WHERE (UsersRanks.poiName = '" + req.body.poiName + "')) " +
+                            "WHERE (POI.poiName = '" + req.body.poiName + "') ")
+                            .then(function (pass) {
+                                res.send(pass);
+                            })
+                            .catch(function (err) {
+                                res.status(400).send("One of the input values is invalid.")
+                            })
                         res.status(400).send("One of the input values is invalid.")
                     })
             } else {
