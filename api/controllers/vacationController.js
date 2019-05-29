@@ -158,8 +158,10 @@ exports.updateUserInfo = function (req, res) {
 
 exports.getUserInfo = function (req, res) {
     let userName = auth(req, res)
-    DButilsAzure.execQuery("SELECT * FROM Users " +
-        "WHERE (userName='" + userName + "')")
+    DButilsAzure.execQuery("SELECT * FROM Users u " +
+        "JOIN UsersInterests us " +
+        "ON u.userName = us.userName " +
+        "WHERE (u.userName='" + userName + "')")
         .then(function (result) {
             res.send(result)
         })
