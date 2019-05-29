@@ -132,7 +132,8 @@ exports.getUserFavorites = function (req, res) {
 
 exports.updateUserInfo = function (req, res) {
     if (!req.body.password || !req.body.firstName || !req.body.lastName || !req.body.country || !req.body.city ||
-        !req.body.email || !req.body.firstQuestion || !req.body.firstAnswer || !req.body.secondQuestion || !req.body.secondAnswer) {
+        !req.body.email || !req.body.firstQuestion || !req.body.firstAnswer || !req.body.secondQuestion || !req.body.secondAnswer ||
+        !req.body.firstInterest || !req.body.secondInterest) {
         res.status(400).send("The request is invalid, the required fields are : password, firstName, lastName, country," +
             " city, email, firstInterest, secondInterest, firstQuestion, firstAnswer, secondQuestion, secondAnswer");
         return;
@@ -158,8 +159,12 @@ exports.updateUserInfo = function (req, res) {
 
 exports.getUserInfo = function (req, res) {
     let userName = auth(req, res)
-    DButilsAzure.execQuery("SELECT * FROM Users " +
-        "WHERE (userName='" + userName + "')")
+    DButilsAzure.execQuery("SELECT * FROM Users u " +
+        "JOIN UsersInterests us " +
+        "ON u.userName = us.userName " +
+        "JOIN UsersQuestions uq " +
+        "ON uq.userName = u.userName " +
+        "WHERE (u.userName='" + userName + "')")
         .then(function (result) {
             res.send(result)
         })

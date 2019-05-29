@@ -41,6 +41,12 @@ module.exports = function (app) {
     app.route('/users/rankPOI')
         .put(vacation.setUserRank);
 
+    app.route('/POI/getDetails')
+        .post(vacation.getPOIDetails);
+
+    app.route('/POI/getAll')
+        .post(vacation.getAllPOI);
+
     app.route('/POI/addReview')
         .put(vacation.addPOIReview);
 
