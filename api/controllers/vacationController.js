@@ -335,12 +335,15 @@ exports.updateWatched = function (req, res) {
         return;
     }
     auth(req, res)
-    DButilsAzure.execQuery("UPDATE POI SET watchedAmount='" + req.body.watchedAmount + "' WHERE poiName='" + req.body.poiName + "'")
+    DButilsAzure.execQuery("UPDATE POI " +
+        "SET watchedAmount = " + "'" + req.body.watchedAmount + "' " +
+        "WHERE poiName='" + req.body.poiName + "' " +
+        "AND watchedAmount + 1 = '"+req.body.watchedAmount+"'")
         .then(function (pass) {
             res.send(pass);
         })
         .catch(function (err) {
-            res.status(400).send("One of the input values is invalid.")
+            res.status(400).send("The given watch value is invalid. Nice try ;)")
         })
 }
 
