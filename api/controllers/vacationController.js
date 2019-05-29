@@ -37,6 +37,7 @@ exports.register = function (req, res) {
         return;
     }
     const countriesFile = './resources/countries.xml';
+    let valid =true;
     fs.readFile(countriesFile, 'utf8', function (error, text) {
         if (error)
             res.status(500).send(`could not open "countries.xml" file: ${error}`);
@@ -46,7 +47,23 @@ exports.register = function (req, res) {
                     const countries = result['Countries']['Country'];
                     const countriesNames = countries.map((county)=>county.Name[0]);
                     if (!countriesNames.includes(req.body.country)){
-                        res.status(400).send('The given country is not supported.')
+                        res.status(400).send('The given country is not supported.');
+                    }
+                    else{
+                        DButilsAzure.execQuery("INSERT INTO Users (userName, password, firstName, lastName, country, city, email)" +
+                            "VALUES ('" + req.body.userName + "','" + req.body.password + "','" + req.body.firstName + "','" + req.body.lastName + "','" +
+                            req.body.country + "','" + req.body.city + "','" + req.body.email + "') " +
+                            "INSERT INTO UsersInterests (userName, firstInterest, secondInterest) " +
+                            "VALUES ('" + req.body.userName + "','" + req.body.firstInterest + "','" + req.body.secondInterest + "') " +
+                            "INSERT INTO UsersQuestions (userName, firstQuestion, firstAnswer, secondQuestion, secondAnswer) " +
+                            "VALUES ('" + req.body.userName + "','" + req.body.firstQuestion + "','" + req.body.firstAnswer + "','" +
+                            req.body.secondQuestion + "','" + req.body.secondAnswer + "')")
+                            .then(function (result) {
+                                res.send(result);
+                            })
+                            .catch(function (err) {
+                                res.status(400).send("A user with the same username already exists.");
+                            });
                     }
                 });
             }
@@ -55,25 +72,8 @@ exports.register = function (req, res) {
             }
         }
 
-    })
-    // if (!countries.includes(req.body.country)) {
-    //     res.status(400).send("The given country is not supported.");
-    //     return;
-    // }
-    DButilsAzure.execQuery("INSERT INTO Users (userName, password, firstName, lastName, country, city, email)" +
-        "VALUES ('" + req.body.userName + "','" + req.body.password + "','" + req.body.firstName + "','" + req.body.lastName + "','" +
-        req.body.country + "','" + req.body.city + "','" + req.body.email + "') " +
-        "INSERT INTO UsersInterests (userName, firstInterest, secondInterest) " +
-        "VALUES ('" + req.body.userName + "','" + req.body.firstInterest + "','" + req.body.secondInterest + "') " +
-        "INSERT INTO UsersQuestions (userName, firstQuestion, firstAnswer, secondQuestion, secondAnswer) " +
-        "VALUES ('" + req.body.userName + "','" + req.body.firstQuestion + "','" + req.body.firstAnswer + "','" +
-        req.body.secondQuestion + "','" + req.body.secondAnswer + "')")
-        .then(function (result) {
-            res.send(result);
-        })
-        .catch(function (err) {
-            res.status(400).send("A user with the same username already exists.");
-        });
+    });
+
 };
 
 exports.login = function (req, res) {
