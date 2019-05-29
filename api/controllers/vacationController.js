@@ -204,7 +204,7 @@ exports.getUserQuestions = function (req, res) {
 }
 
 exports.getAllPOI = function (req, res) {
-    DButilsAzure.execQuery("Select distinct POI.category, POI.description, POI.watchedAmount, POI.rank, POI.image,\n" +
+    DButilsAzure.execQuery("Select POI.poiName, POI.category, POI.description, POI.watchedAmount, POI.rank, POI.image,\n" +
         "POIReviews.dateFirstReview, POIReviews.firstReview, POIReviews.dateSecondReview,\n" +
         "POIReviews.secondReview\n" +
         "from POI join POIReviews on POIReviews.poiName=POI.poiName")
@@ -261,6 +261,7 @@ exports.addFavoritePOI = function (req, res) {
             res.status(400).send("One of the input values is invalid.")
         })
 }
+
 
 exports.removeFavoritePOI = function (req, res) {
     if (!req.body.poiName) {
@@ -338,6 +339,26 @@ exports.updatePOIRank = function (req, res) {
     DButilsAzure.execQuery("UPDATE POI SET rank='" + req.body.rank + "' WHERE poiName='" + req.body.poiName + "'")
         .then(function (pass) {
             res.send(pass);
+        })
+        .catch(function (err) {
+            res.status(400).send("One of the input values is invalid.")
+        })
+}
+
+exports.updateWatched = function (req, res) {
+    DButilsAzure.execQuery("UPDATE POI SET watchedAmount='" + req.body.watchedAmount + "' WHERE poiName='" + req.body.poiName + "'")
+        .then(function (pass) {
+            res.send(pass);
+        })
+        .catch(function (err) {
+            res.status(400).send("One of the input values is invalid.")
+        })
+}
+
+exports.getCategories = function (req, res) {
+    DButilsAzure.execQuery("SELECT * FROM Categories")
+        .then(function (result) {
+            res.send(result)
         })
         .catch(function (err) {
             res.status(400).send("One of the input values is invalid.")

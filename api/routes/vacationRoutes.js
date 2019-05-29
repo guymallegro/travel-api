@@ -23,23 +23,23 @@ module.exports = function (app) {
     app.route('/users/getInfo')
         .post(vacation.getUserInfo);
 
+    app.route('/POI/getDetails')
+        .post(vacation.getPOIDetails);
+
+    app.route('/POI/getAll')
+        .post(vacation.getAllPOI);
+
+    app.route('/POI/getCategories')
+        .get(vacation.getCategories);
+
     app.route('/users/updateInfo')
         .put(vacation.updateUserInfo);
 
     app.route('/users/addFavoritePOI')
         .put(vacation.addFavoritePOI);
 
-    app.route('/users/removeFavoritePOI')
-        .delete(vacation.removeFavoritePOI);
-
     app.route('/users/rankPOI')
         .put(vacation.setUserRank);
-
-    app.route('/POI/getDetails')
-        .post(vacation.getPOIDetails);
-
-    app.route('/POI/getAll')
-        .post(vacation.getAllPOI);
 
     app.route('/POI/addReview')
         .put(vacation.addPOIReview);
@@ -49,5 +49,11 @@ module.exports = function (app) {
 
     app.route('/POI/getAllRanks')
         .put(vacation.getAllPOIRanks);
+
+    app.route('/POI/updateWatched')
+        .put(vacation.updateWatched);
+
+    app.route('/users/removeFavoritePOI')
+        .delete(vacation.removeFavoritePOI);
 
 };
