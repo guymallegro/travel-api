@@ -35,19 +35,19 @@ module.exports = function (app) {
     app.route('/users/rankPOI')
         .put(vacation.setUserRank);
 
-    app.route('/POI/getDetails')
+    app.route('/poi/getDetails')
         .post(vacation.getPOIDetails);
 
-    app.route('/POI/getAll')
+    app.route('/poi/getAll')
         .post(vacation.getAllPOI);
 
-    app.route('/POI/addReview')
+    app.route('/poi/addReview')
         .put(vacation.addPOIReview);
 
-    app.route('/POI/updateRank')
+    app.route('/poi/updateRank')
         .put(vacation.updatePOIRank);
 
-    app.route('/POI/getAllRanks')
+    app.route('/poi/getAllRanks')
         .put(vacation.getAllPOIRanks);
 
 };
