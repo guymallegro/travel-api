@@ -23,43 +23,31 @@ module.exports = function (app) {
     app.route('/users/getInfo')
         .post(vacation.getUserInfo);
 
-    app.route('/POI/getDetails')
-        .post(vacation.getPOIDetails);
-
-    app.route('/POI/getAll')
-        .post(vacation.getAllPOI);
-
-    app.route('/POI/getCategories')
-        .get(vacation.getCategories);
-
     app.route('/users/updateInfo')
         .put(vacation.updateUserInfo);
 
     app.route('/users/addFavoritePOI')
         .put(vacation.addFavoritePOI);
 
+    app.route('/users/removeFavoritePOI')
+        .delete(vacation.removeFavoritePOI);
+
     app.route('/users/rankPOI')
         .put(vacation.setUserRank);
 
-    app.route('/POI/getDetails')
-        .post(vacation.getPOIDetails);
+    app.route('/poi/getDetails')
+        .get(vacation.getPOIDetails);
 
-    app.route('/POI/getAll')
-        .post(vacation.getAllPOI);
+    app.route('/poi/getAll')
+        .get(vacation.getAllPOI);
 
-    app.route('/POI/addReview')
+    app.route('/POI/getCategories')
+        .get(vacation.getCategories);
+
+    app.route('/poi/addReview')
         .put(vacation.addPOIReview);
 
-    app.route('/POI/updateRank')
-        .put(vacation.updatePOIRank);
-
-    app.route('/POI/getAllRanks')
-        .put(vacation.getAllPOIRanks);
-
-    app.route('/POI/updateWatched')
+    app.route('/POI/updateSeenAmount')
         .put(vacation.updateWatched);
-
-    app.route('/users/removeFavoritePOI')
-        .delete(vacation.removeFavoritePOI);
 
 };

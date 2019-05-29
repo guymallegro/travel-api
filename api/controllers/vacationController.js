@@ -300,50 +300,29 @@ exports.setUserRank = function (req, res) {
             if (result == 0) {
                 DButilsAzure.execQuery("INSERT INTO usersRanks (userName, poiName, rank) VALUES " +
                     "('" + userName + "','" + req.body.poiName + "','" + req.body.rank + "')")
-                    .then(function (pass) {
-                        res.send(pass);
-                    })
                     .catch(function (err) {
                         res.status(400).send("One of the input values is invalid.")
                     })
             } else {
                 DButilsAzure.execQuery("UPDATE usersRanks SET rank='" + req.body.rank + "' WHERE poiName='" + req.body.poiName +
                     "' AND userName='" + userName + "'")
-                    .then(function (pass) {
-                        res.send(pass);
-                    })
                     .catch(function (err) {
                         res.status(400).send("One of the input values is invalid.")
                     })
             }
-        })
-        .catch(function (err) {
-            res.status(400).send("One of the input values is invalid.")
-        })
-}
+            DButilsAzure.execQuery("UPDATE POI " +
+                "SET POI.rank = " +
+                "(SELECT AVG(UsersRanks.rank) " +
+                "FROM UsersRanks " +
+                "WHERE (UsersRanks.poiName = '" + req.body.poiName + "')) " +
+                "WHERE (POI.poiName = '" + req.body.poiName + "') ")
+                .then(function (pass) {
+                    res.send(pass);
+                })
+                .catch(function (err) {
+                    res.status(400).send("One of the input values is invalid.")
+                })
 
-exports.getAllPOIRanks = function (req, res) {
-    DButilsAzure.execQuery("SELECT * FROM usersRanks")
-        .then(function (result) {
-            res.send(result)
-        })
-        .catch(function (err) {
-            res.status(400).send("One of the input values is invalid.")
-        })
-}
-
-exports.updatePOIRank = function (req, res) {
-    if (!req.body.poiName || !req.body.rank) {
-        res.status(400).send("The request is invalid, the required fields are : poiName, rank");
-        return;
-    }
-    if (req.body.rank < 1 || req.body.rank > 5) {
-        res.status(400).send("rank should be between 1 and 5.")
-        return;
-    }
-    DButilsAzure.execQuery("UPDATE POI SET rank='" + req.body.rank + "' WHERE poiName='" + req.body.poiName + "'")
-        .then(function (pass) {
-            res.send(pass);
         })
         .catch(function (err) {
             res.status(400).send("One of the input values is invalid.")
@@ -351,6 +330,7 @@ exports.updatePOIRank = function (req, res) {
 }
 
 exports.updateWatched = function (req, res) {
+    auth(req, res)
     DButilsAzure.execQuery("UPDATE POI SET watchedAmount='" + req.body.watchedAmount + "' WHERE poiName='" + req.body.poiName + "'")
         .then(function (pass) {
             res.send(pass);
