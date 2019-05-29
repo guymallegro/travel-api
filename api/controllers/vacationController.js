@@ -9,8 +9,6 @@ var fs = require('fs'),
     xml2js = require('xml2js');
 
 var parser = new xml2js.Parser();
-// let countries = ["Australia", "Bolivia", "China", "Denemark", "Israel", "Latvia", "Monaco", "August", "Norway",
-//     "Panama", "Switzerland", "USA"]
 
 exports.register = function (req, res) {
     if (!req.body.userName || !req.body.password || !req.body.firstName || !req.body.lastName || !req.body.country ||
