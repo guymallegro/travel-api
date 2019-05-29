@@ -161,6 +161,8 @@ exports.getUserInfo = function (req, res) {
     DButilsAzure.execQuery("SELECT * FROM Users u " +
         "JOIN UsersInterests us " +
         "ON u.userName = us.userName " +
+        "JOIN UsersQuestions uq " +
+        "ON uq.userName = u.userName " +
         "WHERE (u.userName='" + userName + "')")
         .then(function (result) {
             res.send(result)
