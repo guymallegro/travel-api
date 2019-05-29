@@ -132,7 +132,8 @@ exports.getUserFavorites = function (req, res) {
 
 exports.updateUserInfo = function (req, res) {
     if (!req.body.password || !req.body.firstName || !req.body.lastName || !req.body.country || !req.body.city ||
-        !req.body.email || !req.body.firstQuestion || !req.body.firstAnswer || !req.body.secondQuestion || !req.body.secondAnswer) {
+        !req.body.email || !req.body.firstQuestion || !req.body.firstAnswer || !req.body.secondQuestion || !req.body.secondAnswer ||
+        !req.body.firstInterest || !req.body.secondInterest) {
         res.status(400).send("The request is invalid, the required fields are : password, firstName, lastName, country," +
             " city, email, firstInterest, secondInterest, firstQuestion, firstAnswer, secondQuestion, secondAnswer");
         return;
