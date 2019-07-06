@@ -196,14 +196,14 @@ exports.getUserInfo = function (req, res) {
 };
 
 exports.getPOIDetails = function (req, res) {
-    if (!req.body.poiName) {
+    if (!req.query.poiName) {
         res.status(400).send("The request is invalid, the required fields are : poiName");
         return;
     }
     DButilsAzure.execQuery("Select distinct POI.category, POI.description, POI.watchedAmount, POI.rank, POI.image,\n" +
         "POIReviews.dateFirstReview, POIReviews.firstReview, POIReviews.dateSecondReview,\n" +
         "POIReviews.secondReview\n" +
-        "from POI join POIReviews on POIReviews.poiName=POI.poiName and POI.poiName='" + req.body.poiName + "'")
+        "from POI join POIReviews on POIReviews.poiName=POI.poiName and POI.poiName='" + req.query.poiName + "'")
         .then(function (result) {
             if (result == 0)
                 res.send("The given POI doesn't exist.")
