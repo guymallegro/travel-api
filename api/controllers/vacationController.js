@@ -291,6 +291,7 @@ exports.addFavoritePOI = function (req, res) {
 
 
 exports.removeFavoritePOI = function (req, res) {
+    console.log(req.body)
     if (!req.body.poiName) {
         res.status(400).send("The request is invalid, the required fields are : poiName");
         return;
@@ -368,7 +369,6 @@ exports.updateWatched = function (req, res) {
         res.status(400).send("The request is invalid, the required fields are : poiName, watchedAmount");
         return;
     }
-    auth(req, res)
     DButilsAzure.execQuery("UPDATE POI " +
         "SET watchedAmount = " + "'" + req.body.watchedAmount + "' " +
         "WHERE poiName='" + req.body.poiName + "' " +
